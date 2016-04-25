@@ -41,7 +41,7 @@ class GSearch extends AsyncTask<Void,String,String>
         //Toast.makeText(MainActivity.this,s,Toast.LENGTH_SHORT).show();
         if(!s.equals("dickmysuck"))
         {
-            Toast.makeText(context, "Searched", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Searched", Toast.LENGTH_SHORT).show();
             JSONParser.ParseGData(context,search,start,s);
 
         }

@@ -3,6 +3,7 @@ package com.thehp.peek;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -104,12 +105,14 @@ public class JSONParser {
             else if(retry&start>=8)
             {
 
-                Toast.makeText(context,"No insta",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"No instagram found.",Toast.LENGTH_SHORT).show();
+                MainActivity.load.setVisibility(View.GONE);
             }
 
             else if(!retry)
             {
                 MainActivity.myAppAdapter.notifyDataSetChanged();
+                MainActivity.load.setVisibility(View.GONE);
                context.startActivity(new Intent(context,InstaActivity.class));
             }
 

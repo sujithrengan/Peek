@@ -11,6 +11,7 @@ package com.thehp.peek;
         import android.widget.BaseAdapter;
         import android.widget.FrameLayout;
         import android.widget.ImageView;
+        import android.widget.ProgressBar;
         import android.widget.TextView;
         import android.widget.Toast;
 
@@ -25,9 +26,10 @@ package com.thehp.peek;
 public class MainActivity extends AppCompatActivity implements FlingCardListener.ActionDownInterface {
 
     public static MyAppAdapter myAppAdapter;
-    public static ViewHolder viewHolder;
+    public static MyAppAdapter.ViewHolder viewHolder;
     private SwipeFlingAdapterView flingContainer;
 
+    public static ProgressBar load;
     public static void removeBackground() {
 
 
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         setContentView(R.layout.activity_main);
 
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+        load=(ProgressBar)findViewById(R.id.marker_progress);
 
         Utilities.dataset = new ArrayList<>();
 
@@ -140,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 View view = flingContainer.getSelectedView();
                 view.findViewById(R.id.background).setAlpha(0);
 
+                load.setVisibility(View.VISIBLE);
                 Log.e("url", Utilities.dataset.get(0).getThumbPath());
                 new GSearch(MainActivity.this,Utilities.dataset.get(0).title,0).execute();
 
@@ -153,97 +157,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         Log.e("action", "bingo");
     }
 
-    public static class ViewHolder {
-        public static FrameLayout background;
-        public TextView infoText;
-        public ImageView cardImage;
-        public TextView titleText;
 
-    }
-
-    public class MyAppAdapter extends BaseAdapter {
-
-
-        private int TYPE_INFO=1;
-        private int TYPE_DATA=2;
-
-        public List<Data> parkingList;
-        public Context context;
-
-        private MyAppAdapter(List<Data> apps, Context context) {
-            this.parkingList = apps;
-            this.context = context;
-        }
-
-        @Override
-        public int getCount() {
-            return parkingList.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-
-            //View rowView = convertView;
-            View rowView = null;
-
-
-
-            if (rowView == null) {
-
-                LayoutInflater inflater = getLayoutInflater();
-                if(parkingList.get(position).type==TYPE_DATA) {
-                    rowView = inflater.inflate(R.layout.item, parent, false);
-                    // configure view holder
-                    viewHolder = new ViewHolder();
-                    viewHolder.background = (FrameLayout) rowView.findViewById(R.id.background);
-                    viewHolder.cardImage = (ImageView) rowView.findViewById(R.id.cardImage);
-                    viewHolder.titleText = (TextView) rowView.findViewById(R.id.title_text);
-
-                }
-                else if(parkingList.get(position).type==TYPE_INFO)
-                {
-                    rowView = inflater.inflate(R.layout.infoitem, parent, false);
-                    // configure view holder
-                    viewHolder = new ViewHolder();
-                    viewHolder.background = (FrameLayout) rowView.findViewById(R.id.background);
-                    viewHolder.infoText = (TextView) rowView.findViewById(R.id.infoText);
-                }
-
-
-                //Log.e("cv","newview");
-                rowView.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) convertView.getTag();
-                //Log.e("cv","convertview");
-
-            }
-
-            if(parkingList.get(position).type==TYPE_DATA) {
-                Glide.with(MainActivity.this).load(parkingList.get(position).getThumbPath()).into(viewHolder.cardImage);
-                viewHolder.titleText.setText(parkingList.get(position).title);
-                viewHolder.titleText.setTypeface(Utilities.janitor);
-            }
-            else if(parkingList.get(position).type==TYPE_INFO) {
-                viewHolder.infoText.setText(parkingList.get(position).getName());
-            }
-
-
-
-            //Log.e("type",getItemViewType(position)+"");
-            return rowView;
-        }
-    }
 
 
 

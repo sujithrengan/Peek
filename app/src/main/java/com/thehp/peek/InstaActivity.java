@@ -9,13 +9,11 @@ import java.util.ArrayList;
 
 public class InstaActivity extends AppCompatActivity implements FlingCardListener.ActionDownInterface {
 
-    public  static MainActivity.MyAppAdapter myAppAdapter;
-    public static MainActivity.ViewHolder viewHolder;
+    public  static MyAppAdapter myAppAdapter;
+    public static MyAppAdapter.ViewHolder viewHolder;
     private SwipeFlingAdapterView flingContainer;
 
     public static void removeBackground() {
-
-
         viewHolder.background.setVisibility(View.GONE);
         myAppAdapter.notifyDataSetChanged();
 
@@ -31,11 +29,38 @@ public class InstaActivity extends AppCompatActivity implements FlingCardListene
         Utilities.idataset = new ArrayList<>();
 
 
-        Utilities.idataset.add(new Data("info", "Swipe left to heart. Swipe right to skip", 1));
+        Utilities.idataset.add(new Data("info", "Swipe left or right to browse.", 1));
         //Todo scrap insta pics
 
+        myAppAdapter = new MyAppAdapter(Utilities.idataset, InstaActivity.this);
 
         flingContainer.setAdapter(myAppAdapter);
+        flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
+            @Override
+            public void removeFirstObjectInAdapter() {
+
+            }
+
+            @Override
+            public void onLeftCardExit(Object dataObject) {
+
+            }
+
+            @Override
+            public void onRightCardExit(Object dataObject) {
+
+            }
+
+            @Override
+            public void onAdapterAboutToEmpty(int itemsInAdapter) {
+
+            }
+
+            @Override
+            public void onScroll(float scrollProgressPercent) {
+
+            }
+        });
     }
 
     @Override

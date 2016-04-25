@@ -20,13 +20,13 @@ public class MyAppAdapter extends BaseAdapter {
 
 
     public  ViewHolder viewHolder;
-    private int TYPE_INFO=1;
-    private int TYPE_DATA=2;
+     int TYPE_INFO=1;
+     int TYPE_DATA=2;
 
     public List<Data> parkingList;
     public Context context;
 
-    private MyAppAdapter(List<Data> apps, Context context) {
+     MyAppAdapter(List<Data> apps, Context context) {
         this.parkingList = apps;
         this.context = context;
     }

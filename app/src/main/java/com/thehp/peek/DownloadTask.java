@@ -59,18 +59,19 @@ class DownloadTask extends AsyncTask<String, Void, Bitmap> {
             HttpEntity httpEntity = null;
 
             httpEntity = response.getEntity();
-
+/*
             Log.e("code",String.valueOf(response.getStatusLine().getStatusCode())+"=="+response.getStatusLine().getReasonPhrase());
 
             Header h[]=response.getAllHeaders();
             for(int i=0;i<h.length;i++)
                 Log.e("header",h[i].getName()+"="+h[i].getValue());
+  */
             byte[] img = EntityUtils.toByteArray(httpEntity);
             image = BitmapFactory.decodeByteArray(img, 0, img.length);
 
 
 
-            Log.e("imgsave",img.length+"="+url);
+            //Log.e("imgsave",img.length+"="+url);
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
