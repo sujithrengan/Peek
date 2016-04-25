@@ -20,6 +20,8 @@
     android:layout_marginLeft="20dp"
     android:layout_marginTop="15dp"
 
+
+    android:id="@+id/mode_btn"
     android:background="@drawable/browse2"/>
 
         <ProgressBar android:indeterminate="true"

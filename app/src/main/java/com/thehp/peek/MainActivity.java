@@ -9,6 +9,7 @@ package com.thehp.peek;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.BaseAdapter;
+        import android.widget.Button;
         import android.widget.FrameLayout;
         import android.widget.ImageView;
         import android.widget.ProgressBar;
@@ -28,7 +29,10 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     public static MyAppAdapter myAppAdapter;
     public static MyAppAdapter.ViewHolder viewHolder;
     private SwipeFlingAdapterView flingContainer;
+    public static int MODE_BROWSE=1;
+    public static int MODE_HEART=2;
 
+    public static int mode;
     public static ProgressBar load;
     public static void removeBackground() {
 
@@ -42,8 +46,27 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mode=MODE_BROWSE;
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
         load=(ProgressBar)findViewById(R.id.marker_progress);
+        final Button mode_btn=(Button)findViewById(R.id.mode_btn);
+        mode_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mode==MODE_BROWSE)
+                {
+                    mode=MODE_HEART;
+                    mode_btn.setBackgroundResource(R.drawable.heart2);
+                }
+
+                else
+                {
+                    mode=MODE_BROWSE;
+                    mode_btn.setBackgroundResource(R.drawable.browse2);
+                }
+
+            }
+        });
 
         Utilities.dataset = new ArrayList<>();
 
@@ -53,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
 
         Utilities.dataset.add(new Data("info","Swipe left to heart. Swipe right to skip",1));
-        new PageScraper(MainActivity.this, "https://www.reddit.com/r/prettygirls/.json").execute();
+        new PageScraper(MainActivity.this, Utilities.URL).execute();
 
         myAppAdapter = new MyAppAdapter(Utilities.dataset, MainActivity.this);
         flingContainer.setAdapter(myAppAdapter);
@@ -78,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 {
                     //TODO:iterate to next page
                     if(Utilities.last_name==null&&PageScraper.IsFetching==false) {
-                        new PageScraper(MainActivity.this, "https://www.reddit.com/r/prettygirls/.json").execute();
+                        new PageScraper(MainActivity.this, Utilities.URL).execute();
 
                     }
                     else if(PageScraper.IsFetching==false)

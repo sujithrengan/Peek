@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class InstaActivity extends AppCompatActivity implements FlingCardListene
     public static MyAppAdapter.ViewHolder viewHolder;
     private SwipeFlingAdapterView flingContainer;
 
+    public static int mode;
     public Stack<Data> dellist;
     public String username="";
     public static void removeBackground() {
@@ -34,10 +36,30 @@ public class InstaActivity extends AppCompatActivity implements FlingCardListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insta);
-
+        mode=MainActivity.MODE_BROWSE;
         username=getIntent().getStringExtra("username");
         Toast.makeText(this,username,Toast.LENGTH_SHORT).show();
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+        final Button mode_btn=(Button)findViewById(R.id.mode_btn);
+        mode_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mode==MainActivity.MODE_BROWSE)
+                {
+                    mode=MainActivity.MODE_HEART;
+                    mode_btn.setBackgroundResource(R.drawable.heart2);
+                }
+
+                else
+                {
+                    mode=MainActivity.MODE_BROWSE;
+                    mode_btn.setBackgroundResource(R.drawable.browse2);
+                }
+
+            }
+        });
+
+
 
         Utilities.idataset = new ArrayList<>();
         dellist=new Stack<Data>();

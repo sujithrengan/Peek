@@ -15,7 +15,8 @@ public class Utilities {
 
     public static String last_name=null;
     //public static boolean IsFetching=false;
-    public static String URL="https://www.reddit.com/r/prettygirls/.json";
+    //public static String URL="https://www.reddit.com/r/prettygirls/.json";
+    public static String URL="https://www.reddit.com/r/GentlemanBoners/.json";
 
     public static Typeface janitor,splurge;
 
