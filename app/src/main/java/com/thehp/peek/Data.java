@@ -17,7 +17,7 @@ public class Data {
         this.name = name;
         this.type=type;
         this.thumbPath=imagePath;
-        this.title="title";
+        this.title=name;
     }
 
 

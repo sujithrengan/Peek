@@ -14,9 +14,10 @@ public class Utilities {
 
 
     public static String last_name=null;
-    public static boolean IsFetching=false;
+    //public static boolean IsFetching=false;
     public static String URL="https://www.reddit.com/r/prettygirls/.json";
 
     public static Typeface janitor,splurge;
 
+    public static String insta_start=null;
 }

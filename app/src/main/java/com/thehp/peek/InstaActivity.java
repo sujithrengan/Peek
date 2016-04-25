@@ -3,19 +3,30 @@ package com.thehp.peek;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class InstaActivity extends AppCompatActivity implements FlingCardListener.ActionDownInterface {
 
-    public  static MyAppAdapter myAppAdapter;
+    public  static MyAppAdapter myAppAdapter=null;
     public static MyAppAdapter.ViewHolder viewHolder;
     private SwipeFlingAdapterView flingContainer;
 
+    public Stack<Data> dellist;
+    public String username="";
     public static void removeBackground() {
-        viewHolder.background.setVisibility(View.GONE);
-        myAppAdapter.notifyDataSetChanged();
+
+    if(myAppAdapter!=null) {
+
+
+    viewHolder.background.setVisibility(View.GONE);
+    myAppAdapter.notifyDataSetChanged();
+        //Log.e("vis",viewHolder.background.getVisibility()+"-"+MainActivity.viewHolder.background.getVisibility());
+    }
 
     }
 
@@ -24,14 +35,18 @@ public class InstaActivity extends AppCompatActivity implements FlingCardListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insta);
 
+        username=getIntent().getStringExtra("username");
+        Toast.makeText(this,username,Toast.LENGTH_SHORT).show();
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
         Utilities.idataset = new ArrayList<>();
-
+        dellist=new Stack<Data>();
 
         Utilities.idataset.add(new Data("info", "Swipe left or right to browse.", 1));
         //Todo scrap insta pics
 
+        Utilities.insta_start="0";
+        new InstaScraper(this,username,Utilities.insta_start).execute();
         myAppAdapter = new MyAppAdapter(Utilities.idataset, InstaActivity.this);
 
         flingContainer.setAdapter(myAppAdapter);
@@ -43,12 +58,25 @@ public class InstaActivity extends AppCompatActivity implements FlingCardListene
 
             @Override
             public void onLeftCardExit(Object dataObject) {
-
+                Utilities.idataset.add(0,dellist.pop());
+                myAppAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
 
+                dellist.push(Utilities.idataset.remove(0));
+                //Utilities.idataset.remove(0);
+                myAppAdapter.notifyDataSetChanged();
+
+                if(Utilities.idataset.size()<7)
+                {
+                    if(InstaScraper.IsFetching==false)
+                    {
+                        new InstaScraper(InstaActivity.this,username,Utilities.insta_start).execute();
+
+                    }
+                }
             }
 
             @Override
@@ -59,6 +87,8 @@ public class InstaActivity extends AppCompatActivity implements FlingCardListene
             @Override
             public void onScroll(float scrollProgressPercent) {
 
+                View view = flingContainer.getSelectedView();
+                view.findViewById(R.id.background).setAlpha(0);
             }
         });
     }

@@ -9,30 +9,36 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
 /**
  * Created by HP on 23-04-2016.
  */
-class PageScraper extends AsyncTask<Void,String,String>
+class InstaScraper extends AsyncTask<Void,String,String>
 {
     Context context;
     String url;
+    String username;
     public static boolean IsFetching=false;
-    PageScraper(Context context,String url)
+    InstaScraper(Context context, String username,String start)
     {
         this.context=context;
-        this.url=url;
+        this.username=username;
+        this.url="https://www.instagram.com/"+username+"/?max_id="+start;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        //Utilities.IsFetching=true;
+        Log.e("j", "pree");
         IsFetching=true;
     }
 
@@ -45,15 +51,13 @@ class PageScraper extends AsyncTask<Void,String,String>
         {
             Toast.makeText(context, "Received", Toast.LENGTH_SHORT).show();
 
-            JSONParser.ParseData(s);
-            //Utilities.IsFetching=false;
+            JSONParser.ParseIData(s);
             IsFetching=false;
 
         }
         else {
 
                 Toast.makeText(context, "Internet?", Toast.LENGTH_SHORT).show();
-            //Utilities.IsFetching=false;
             IsFetching=false;
         }
 
@@ -64,20 +68,23 @@ class PageScraper extends AsyncTask<Void,String,String>
     protected String doInBackground(Void... voids) {
 
         String res="dickmysuck";
-        HttpClient httpClient=new DefaultHttpClient();
-        HttpEntity httpEntity=null;
-        HttpGet httpGet=new HttpGet(url);
-        httpGet.addHeader("User-agent","windows:peek:v1.0");
-
-
         try {
-            HttpResponse response=httpClient.execute(httpGet);
-            httpEntity=response.getEntity();
-            res= EntityUtils.toString(httpEntity);
+            Document doc = Jsoup.connect(url).get();
+           // Log.e("j", doc.title());
 
-            Log.e("Async", "inside");
+            Elements e=doc.getElementsByTag("body");
+            Log.e("ji", e.html());
+            Log.e("jo", e.outerHtml());
 
-        } catch (IOException e) {
+            doc=Jsoup.parse(e.html());
+            e=doc.getElementsByTag("script");
+            for(int i=0;i<e.size();i++)
+            {
+                if(e.get(i).data().startsWith("window._sharedData = "))
+                    res=e.get(i).data().substring(("window._sharedData = ").length(),e.get(i).data().length());
+            }
+
+        } catch (Exception e) {
             Log.e("Async", "catched");
             e.printStackTrace();
         }

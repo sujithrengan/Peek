@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     public static ProgressBar load;
     public static void removeBackground() {
 
-
         viewHolder.background.setVisibility(View.GONE);
         myAppAdapter.notifyDataSetChanged();
 
@@ -78,11 +77,11 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 if(Utilities.dataset.size()<10)
                 {
                     //TODO:iterate to next page
-                    if(Utilities.last_name==null&&Utilities.IsFetching==false) {
+                    if(Utilities.last_name==null&&PageScraper.IsFetching==false) {
                         new PageScraper(MainActivity.this, "https://www.reddit.com/r/prettygirls/.json").execute();
 
                     }
-                    else if(Utilities.IsFetching==false)
+                    else if(PageScraper.IsFetching==false)
                     {
                         new PageScraper(MainActivity.this,Utilities.URL+"?count=25&after="+Utilities.last_name).execute();
 
@@ -104,11 +103,11 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 if(Utilities.dataset.size()<10)
                 {
                     //TODO:iterate to next page
-                    if(Utilities.last_name==null&&Utilities.IsFetching==false) {
+                    if(Utilities.last_name==null&&PageScraper.IsFetching==false) {
                         new PageScraper(MainActivity.this, Utilities.URL).execute();
 
                     }
-                    else if(Utilities.IsFetching==false)
+                    else if(PageScraper.IsFetching==false)
                     {
                         new PageScraper(MainActivity.this,Utilities.URL+"?count=25&after="+Utilities.last_name).execute();
 

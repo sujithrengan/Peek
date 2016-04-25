@@ -67,8 +67,6 @@ public class JSONParser {
     }
 
     public static void ParseGData(Context context,String search,int start,String s) {
-
-
         String vurl="";
         String url="";
         String username="";
@@ -112,8 +110,11 @@ public class JSONParser {
             else if(!retry)
             {
                 MainActivity.myAppAdapter.notifyDataSetChanged();
+
+                Intent i=new Intent(context,InstaActivity.class);
+                i.putExtra("username",username);
+                context.startActivity(i);
                 MainActivity.load.setVisibility(View.GONE);
-               context.startActivity(new Intent(context,InstaActivity.class));
             }
 
 
@@ -121,4 +122,47 @@ public class JSONParser {
             e.printStackTrace();
         }
     }
+
+
+
+
+    public static void ParseIData(String s) {
+        String title="";
+        String url="";
+        String id="";
+        try {
+            JSONObject data=new JSONObject(s);
+            data=data.getJSONObject("entry_data");
+            JSONObject media=data.getJSONArray("ProfilePage").getJSONObject(0).getJSONObject("user").getJSONObject("media");
+            Utilities.insta_start=media.getJSONObject("page_info").getString("end_cursor");
+            JSONArray children=media.getJSONArray("nodes");
+            Log.e("start",Utilities.insta_start);
+            for(int i=0;i<children.length();i++)
+            {
+
+                JSONObject childdata=children.getJSONObject(i);
+                url=childdata.getString("display_src");
+
+                try {
+                    title=childdata.getString("caption");
+                }
+                catch (JSONException e){
+
+                }
+
+                //id=childdata.getString("id");
+                //Log.e("child",url+"="+title);
+
+                Utilities.idataset.add(new Data(url,title, 2));
+                InstaActivity.myAppAdapter.notifyDataSetChanged();
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }

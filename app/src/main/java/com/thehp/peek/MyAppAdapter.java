@@ -19,7 +19,7 @@ import java.util.List;
 public class MyAppAdapter extends BaseAdapter {
 
 
-    public  ViewHolder viewHolder;
+    public ViewHolder viewHolder;
      int TYPE_INFO=1;
      int TYPE_DATA=2;
 
