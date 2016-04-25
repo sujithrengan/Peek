@@ -35,26 +35,33 @@ public class JSONParser {
                 url=childdata.getString("url");
                 title=childdata.getString("title");
                 name=childdata.getString("name");
-                if(childdata.getString("post_hint").equals("link"))
+                String hint="";
+                try {
+                    hint = childdata.getString("post_hint");
+                }
+                catch (JSONException e){}
+                if(hint.equals("link"))
                 {
                     url+=".jpg";
                 }
 
-                width=childdata.getJSONObject("preview").getJSONArray("images").getJSONObject(0).getJSONObject("source").getInt("width");
-                if(width>1000) {
-                    JSONArray res = childdata.getJSONObject("preview").getJSONArray("images").getJSONObject(0).getJSONArray("resolutions");
-                    for (int j = res.length() - 1; j >= 0; j--) {
-                        width = res.getJSONObject(j).getInt("width");
-                        turl = res.getJSONObject(j).getString("url");
-                        turl = turl.replace("&amp;", "&");
-                        if (width < 1000) {
-                            break;
-                        }
+                if (!childdata.getString("domain").startsWith("self")) {
 
-                    }
+                    width = childdata.getJSONObject("preview").getJSONArray("images").getJSONObject(0).getJSONObject("source").getInt("width");
+                    if (width > 1000) {
+                        JSONArray res = childdata.getJSONObject("preview").getJSONArray("images").getJSONObject(0).getJSONArray("resolutions");
+                        for (int j = res.length() - 1; j >= 0; j--) {
+                            width = res.getJSONObject(j).getInt("width");
+                            turl = res.getJSONObject(j).getString("url");
+                            turl = turl.replace("&amp;", "&");
+                            if (width < 1000) {
+                                break;
+                            }
+
+                        }
+                    } else
+                        turl = url;
                 }
-                else
-                turl=url;
                 Utilities.dataset.add(new Data(url,turl,name,title,2));
                 MainActivity.myAppAdapter.notifyDataSetChanged();
                 Utilities.last_name=name;

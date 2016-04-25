@@ -56,8 +56,8 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
-
-                android:text="...Patience..."/>
+android:background="#4e4e4d"
+                android:text="Patience, brother"/>
             <ImageView
                 android:id="@+id/cardImage"
                 android:layout_width="match_parent"
@@ -69,6 +69,7 @@
         <TextView
             android:layout_width="match_parent"
             android:id="@+id/title_text"
+            android:textColor="@color/colorGrey"
             android:layout_height="0dp"
             android:gravity="center"
             android:text="name description"
