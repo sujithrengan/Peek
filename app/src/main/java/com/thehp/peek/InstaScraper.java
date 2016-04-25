@@ -38,7 +38,7 @@ class InstaScraper extends AsyncTask<Void,String,String>
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        Log.e("j", "pree");
+        //Log.e("j", "pree");
         IsFetching=true;
     }
 
@@ -49,7 +49,7 @@ class InstaScraper extends AsyncTask<Void,String,String>
         //Toast.makeText(MainActivity.this,s,Toast.LENGTH_SHORT).show();
         if(!s.equals("dickmysuck"))
         {
-            Toast.makeText(context, "Received", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Received", Toast.LENGTH_SHORT).show();
 
             JSONParser.ParseIData(s);
             IsFetching=false;

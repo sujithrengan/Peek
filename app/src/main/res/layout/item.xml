@@ -99,6 +99,6 @@ android:background="#4e4e4d"
         android:alpha="0"
 
 
-        android:background="@drawable/heart" />
+        android:background="@drawable/heart2" />
 
 </FrameLayout>

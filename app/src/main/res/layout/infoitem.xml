@@ -56,7 +56,7 @@
         android:layout_height="40dp"
         android:alpha="0"
 
-        android:background="@drawable/heart" />
+        />
 
     <View
         android:id="@+id/item_swipe_right_indicator"
@@ -68,6 +68,6 @@
         android:alpha="0"
 
 
-        android:background="@drawable/heart" />
+         />
 
 </FrameLayout>

@@ -17,6 +17,7 @@ public class Utilities {
     //public static boolean IsFetching=false;
    // public static String URL="https://www.reddit.com/r/prettygirls/.json";
     public static String URL="https://www.reddit.com/r/GentlemanBoners/.json";
+    //public static String URL="https://www.reddit.com/r/models/.json";
 
 
     public static Typeface janitor,splurge;

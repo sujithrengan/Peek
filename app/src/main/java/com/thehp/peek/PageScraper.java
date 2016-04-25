@@ -43,7 +43,7 @@ class PageScraper extends AsyncTask<Void,String,String>
         //Toast.makeText(MainActivity.this,s,Toast.LENGTH_SHORT).show();
         if(!s.equals("dickmysuck"))
         {
-            Toast.makeText(context, "Received", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Received", Toast.LENGTH_SHORT).show();
 
             JSONParser.ParseData(s);
             //Utilities.IsFetching=false;

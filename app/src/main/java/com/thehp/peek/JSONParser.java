@@ -35,6 +35,7 @@ public class JSONParser {
                 url=childdata.getString("url");
                 title=childdata.getString("title");
                 name=childdata.getString("name");
+                turl=url;
                 String hint="";
                 try {
                     hint = childdata.getString("post_hint");
@@ -44,23 +45,30 @@ public class JSONParser {
                 {
                     url+=".jpg";
                 }
+                try {
 
-                if (!childdata.getString("domain").startsWith("self")) {
 
-                    width = childdata.getJSONObject("preview").getJSONArray("images").getJSONObject(0).getJSONObject("source").getInt("width");
-                    if (width > 1000) {
-                        JSONArray res = childdata.getJSONObject("preview").getJSONArray("images").getJSONObject(0).getJSONArray("resolutions");
-                        for (int j = res.length() - 1; j >= 0; j--) {
-                            width = res.getJSONObject(j).getInt("width");
-                            turl = res.getJSONObject(j).getString("url");
-                            turl = turl.replace("&amp;", "&");
-                            if (width < 1000) {
-                                break;
+                    if (!childdata.getString("domain").startsWith("self")) {
+
+                        width = childdata.getJSONObject("preview").getJSONArray("images").getJSONObject(0).getJSONObject("source").getInt("width");
+                        if (width > 1000) {
+                            JSONArray res = childdata.getJSONObject("preview").getJSONArray("images").getJSONObject(0).getJSONArray("resolutions");
+                            for (int j = res.length() - 1; j >= 0; j--) {
+                                width = res.getJSONObject(j).getInt("width");
+                                turl = res.getJSONObject(j).getString("url");
+                                turl = turl.replace("&amp;", "&");
+                                if (width < 1000) {
+                                    break;
+                                }
+
                             }
+                        } else
+                            turl = url;
+                    }
 
-                        }
-                    } else
-                        turl = url;
+                }
+                catch (JSONException e){
+
                 }
                 Utilities.dataset.add(new Data(url,turl,name,title,2));
                 MainActivity.myAppAdapter.notifyDataSetChanged();
