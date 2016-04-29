@@ -52,7 +52,7 @@ class InstaScraper extends AsyncTask<Void,String,String>
             //Toast.makeText(context, "Received", Toast.LENGTH_SHORT).show();
 
             JSONParser.ParseIData(s);
-            IsFetching=false;
+
 
         }
         else {

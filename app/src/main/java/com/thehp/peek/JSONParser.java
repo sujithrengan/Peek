@@ -118,8 +118,9 @@ public class JSONParser {
             else if(retry&start>=8)
             {
 
-                Toast.makeText(context,"No instagram found.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"Account not found.",Toast.LENGTH_SHORT).show();
                 MainActivity.load.setVisibility(View.GONE);
+                InstaScraper.IsFetching=false;
             }
 
             else if(!retry)
@@ -129,6 +130,7 @@ public class JSONParser {
                 Intent i=new Intent(context,InstaActivity.class);
                 i.putExtra("username",username);
                 context.startActivity(i);
+                InstaScraper.IsFetching=false;
                 MainActivity.load.setVisibility(View.GONE);
             }
 
@@ -168,7 +170,7 @@ public class JSONParser {
                 //id=childdata.getString("id");
                 //Log.e("child",url+"="+title);
 
-                Utilities.idataset.add(new Data(url,title, 2));
+                Utilities.idataset.add(new Data(url,title, MyAppAdapter.TYPE_DATA));
                 InstaActivity.myAppAdapter.notifyDataSetChanged();
             }
 

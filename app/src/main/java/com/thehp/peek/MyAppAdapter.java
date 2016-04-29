@@ -1,10 +1,13 @@
 package com.thehp.peek;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,8 +23,10 @@ public class MyAppAdapter extends BaseAdapter {
 
 
     public ViewHolder viewHolder;
-     int TYPE_INFO=1;
-     int TYPE_DATA=2;
+    public IViewHolder iviewHolder;
+     public static int TYPE_INFO=1;
+    public  static int TYPE_DATA=2;
+     public static int TYPE_SEARCH=3;
 
     public List<Data> parkingList;
     public Context context;
@@ -47,6 +52,7 @@ public class MyAppAdapter extends BaseAdapter {
     }
 
 
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
@@ -70,18 +76,33 @@ public class MyAppAdapter extends BaseAdapter {
             else if(parkingList.get(position).type==TYPE_INFO)
             {
                 rowView = inflater.inflate(R.layout.infoitem, parent, false);
-                // configure view holder
+                //configure view holder
                 viewHolder = new ViewHolder();
                 viewHolder.background = (FrameLayout) rowView.findViewById(R.id.background);
                 viewHolder.infoText = (TextView) rowView.findViewById(R.id.infoText);
+
+
             }
 
 
-            //Log.e("cv","newview");
+            else if(parkingList.get(position).type==TYPE_SEARCH)
+            {
+                rowView = inflater.inflate(R.layout.searchitem, parent, false);
+                // configure view holder
+                iviewHolder = new IViewHolder();
+                iviewHolder.background = (FrameLayout) rowView.findViewById(R.id.background);
+                iviewHolder.infoText = (TextView) rowView.findViewById(R.id.infoText);
+                iviewHolder.titleText = (TextView) rowView.findViewById(R.id.clicktxt);
+                iviewHolder.searchText=(EditText)rowView.findViewById(R.id.search);
+                Log.e("cv","newsearchview");
+            }
+
+
+
             rowView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
-            //Log.e("cv","convertview");
+            Log.e("cv","convertview");
 
         }
 
@@ -92,6 +113,25 @@ public class MyAppAdapter extends BaseAdapter {
         }
         else if(parkingList.get(position).type==TYPE_INFO) {
             viewHolder.infoText.setText(parkingList.get(position).getName());
+
+        }
+        else if(parkingList.get(position).type==TYPE_SEARCH)
+        {
+            iviewHolder.infoText.setText(parkingList.get(position).getName());
+            iviewHolder.titleText.setTypeface(Utilities.janitor);
+            iviewHolder.titleText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    Intent i=new Intent(context,InstaActivity.class);
+                    i.putExtra("username",iviewHolder.searchText.getText().toString());
+                    context.startActivity(i);
+                    iviewHolder.searchText.setText("");
+                }
+            });
+            Log.e("cv","impsearchview");
+
         }
 
 
@@ -99,12 +139,25 @@ public class MyAppAdapter extends BaseAdapter {
         //Log.e("type",getItemViewType(position)+"");
         return rowView;
     }
+    void setSearchVisibilty()
+    {
+        this.viewHolder.searchText.setVisibility(View.VISIBLE);
+    }
 
     public static class ViewHolder {
         public static FrameLayout background;
         public TextView infoText;
         public ImageView cardImage;
         public TextView titleText;
+        public EditText searchText;
+
+    }
+
+    public static class IViewHolder {
+        public static FrameLayout background;
+        public TextView infoText;
+        public TextView titleText;
+        public EditText searchText;
 
     }
 }

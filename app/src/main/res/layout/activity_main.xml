@@ -13,7 +13,9 @@
 
         android:layout_height="match_parent"
         android:background="@color/colorGrey">
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <Button
     android:layout_width="44dp"
     android:layout_height="44dp"
@@ -24,6 +26,18 @@
     android:id="@+id/mode_btn"
     android:background="@drawable/browse2"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Swipe card to change mode."
+            android:visibility="gone"
+            android:layout_alignBottom="@id/mode_btn"
+            android:layout_toRightOf="@id/mode_btn"
+            android:textColor="@color/colorYellow"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/hinttext"/>
+
+</RelativeLayout>
         <ProgressBar android:indeterminate="true"
             android:layout_width="44dp"
             android:layout_height="44dp"
@@ -34,7 +48,6 @@
             android:layout_marginTop="15dp"
 
             style="?android:attr/progressBarStyle"/>
-
         <com.thehp.peek.SwipeFlingAdapterView
             android:id="@+id/frame"
             android:layout_width="match_parent"

@@ -18,25 +18,41 @@ package com.thehp.peek;
 
         import com.bumptech.glide.Glide;
         import com.bumptech.glide.load.engine.DiskCacheStrategy;
+        import com.bumptech.glide.util.Util;
 
         import java.io.File;
         import java.util.ArrayList;
         import java.util.List;
+        import android.os.Handler;
+        import java.util.logging.LogRecord;
 
 
 public class MainActivity extends AppCompatActivity implements FlingCardListener.ActionDownInterface {
 
     public static MyAppAdapter myAppAdapter;
     public static MyAppAdapter.ViewHolder viewHolder;
+    public static MyAppAdapter.IViewHolder iviewHolder;
     private SwipeFlingAdapterView flingContainer;
+    private Handler mhandler=null;
+    private TextView hinttext;
     public static int MODE_BROWSE=1;
     public static int MODE_HEART=2;
+    public static int MODE_INSTA=3;
+    public boolean isIcard=false;
+
 
     public static int mode;
     public static ProgressBar load;
     public static void removeBackground() {
 
+
+        if(Utilities.dataset.get(0).type!=MyAppAdapter.TYPE_SEARCH)
         viewHolder.background.setVisibility(View.GONE);
+        else
+           // iviewHolder.background.setVisibility(View.GONE);
+
+
+
         myAppAdapter.notifyDataSetChanged();
 
     }
@@ -49,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         mode=MODE_BROWSE;
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
         load=(ProgressBar)findViewById(R.id.marker_progress);
+        hinttext=(TextView)findViewById(R.id.hinttext);
+        mhandler=new Handler();
         final Button mode_btn=(Button)findViewById(R.id.mode_btn);
         mode_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,10 +77,47 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                     mode_btn.setBackgroundResource(R.drawable.heart2);
                 }
 
-                else
+                else if(mode==MODE_INSTA)
                 {
                     mode=MODE_BROWSE;
+                    if(isIcard&&Utilities.dataset.get(0).type==MyAppAdapter.TYPE_DATA) {
+                        Utilities.dataset.remove(1);
+                        isIcard=false;
+                    }
                     mode_btn.setBackgroundResource(R.drawable.browse2);
+                }
+
+                else if(mode==MODE_HEART)
+                {
+                    mode=MODE_INSTA;
+                    hinttext.setVisibility(View.VISIBLE);
+                    hinttext.setAlpha(1.0f);
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(hinttext.getAlpha()>0.02f) {
+                                Log.e("alpha",hinttext.getAlpha()+"");
+                                hinttext.setAlpha(hinttext.getAlpha() - 0.01f);
+
+                                mhandler.postDelayed(this,10);
+                            }
+
+                            else
+                            hinttext.setVisibility(View.GONE);
+                        }
+                    },1000);
+
+
+                    if(isIcard==false) {
+                        Utilities.dataset.add(1, new Data("info", "", MyAppAdapter.TYPE_SEARCH));
+                        isIcard=true;
+                    }
+
+
+                    myAppAdapter.notifyDataSetChanged();
+
+                    mode_btn.setBackgroundResource(R.drawable.insta2);
+
                 }
 
             }
@@ -75,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
 
 
-        Utilities.dataset.add(new Data("info","Swipe left to heart. Swipe right to skip",1));
+        Utilities.dataset.add(new Data("info","Swipe left to heart. Swipe right to skip. ",MyAppAdapter.TYPE_INFO));
         new PageScraper(MainActivity.this, Utilities.URL).execute();
 
         myAppAdapter = new MyAppAdapter(Utilities.dataset, MainActivity.this);
@@ -93,6 +148,11 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 if(myAppAdapter.parkingList.get(0).type==myAppAdapter.TYPE_DATA)
                 new DownloadTask(MainActivity.this,Utilities.dataset.get(0).getImagePath(),Utilities.dataset.get(0).getName()).execute();
 
+                else if(myAppAdapter.parkingList.get(0).type==myAppAdapter.TYPE_SEARCH) {
+                    isIcard=false;
+                    mode=MODE_BROWSE;
+                    mode_btn.setBackgroundResource(R.drawable.browse2);
+                }
                 Utilities.dataset.remove(0);
                 myAppAdapter.notifyDataSetChanged();
 
@@ -121,6 +181,11 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             @Override
             public void onRightCardExit(Object dataObject) {
 
+                if(myAppAdapter.parkingList.get(0).type==myAppAdapter.TYPE_SEARCH){
+                    isIcard=false;
+                    mode=MODE_BROWSE;
+                    mode_btn.setBackgroundResource(R.drawable.browse2);
+                }
                 Utilities.dataset.remove(0);
                 myAppAdapter.notifyDataSetChanged();
                 if(Utilities.dataset.size()<10)
@@ -162,13 +227,18 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
 
-                View view = flingContainer.getSelectedView();
-                view.findViewById(R.id.background).setAlpha(0);
+                if(mode!=MODE_INSTA) {
 
-                load.setVisibility(View.VISIBLE);
-                Log.e("url", Utilities.dataset.get(0).getThumbPath());
-                new GSearch(MainActivity.this,Utilities.dataset.get(0).title,0).execute();
+                    if(Utilities.dataset.get(0).type==MyAppAdapter.TYPE_DATA) {
+                        View view = flingContainer.getSelectedView();
+                        view.findViewById(R.id.background).setAlpha(0);
 
+                        load.setVisibility(View.VISIBLE);
+                        Log.e("url", Utilities.dataset.get(0).getThumbPath());
+                        new GSearch(MainActivity.this, Utilities.dataset.get(0).title, 0).execute();
+
+                    }
+                }
             }
         });
 
