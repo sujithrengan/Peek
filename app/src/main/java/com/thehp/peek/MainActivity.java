@@ -235,7 +235,9 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
                         load.setVisibility(View.VISIBLE);
                         Log.e("url", Utilities.dataset.get(0).getThumbPath());
-                        new GSearch(MainActivity.this, Utilities.dataset.get(0).title, 0).execute();
+                       // new GSearch(MainActivity.this, Utilities.dataset.get(0).title, 0).execute();
+                        new WebstaSearch(MainActivity.this, Utilities.dataset.get(0).title, 0).execute();
+
 
                     }
                 }

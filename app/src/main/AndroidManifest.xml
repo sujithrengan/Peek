@@ -9,9 +9,9 @@
 
     <application
         android:allowBackup="true"
-        android:largeHeap="true"
         android:icon="@drawable/peek"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
@@ -21,8 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SplashActivity"></activity>
-        <activity android:name=".InstaActivity"></activity>
+        <activity android:name=".SplashActivity" />
+        <activity android:name=".InstaActivity" />
+        <activity android:name=".HomeScreen">
+
+        </activity>
     </application>
 
 </manifest>
